@@ -1,3 +1,6 @@
+// This solution does not work
+// Check the C++ solution of the same name
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,7 +20,7 @@ int len(int a){
 
 int main(){
 	int testcases,  n, ans;
-	int a[1000], b[1000];
+	int a[200500], b[200500];
 	int counta[10]={0}, countb[10]={0};
 	scanf("%d", &testcases);
 	while(testcases--){
