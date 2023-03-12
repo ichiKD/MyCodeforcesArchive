@@ -3,95 +3,73 @@
 using namespace std;
 
 #define fastIO ios_base::sync_with_stdio(0 && cin.tie(0) && cout.tie(0));
-#define ll long long
 
 int main() {
     fastIO;
     int testcases;
-    ll int n, m;
-    ll int sum1, sum2, ans, ans1, ans2;
-	ll int a[200500];
-	priority_queue <ll int, vector<ll int>, greater<ll int> > pqm;  	//minheap
-	//priority_queue <ll int, vector<ll int>> pq;  						//maxheap
+    long long int n, m;
+    long long int ans;
+	long long int sum, negativesum;
+	long long int a[300500];
+	priority_queue <long long int, vector<long long int>, greater<long long int> > minheap;  	//minheap
+	priority_queue <long long int> maxheap;  						//maxheap
     cin>>testcases;
     while(testcases--) {
         cin>>n>>m;
 		for(int i=0;i<n;i++){
 			cin>>a[i];
 		}
+		ans=0;
+		while(!minheap.empty()){
+			minheap.pop();
+		}
+		while(!maxheap.empty()){
+			maxheap.pop();
+		}
 		if(n==1){
 			cout<<"0\n";
 		}
-		else if(m==1){
-			sum1=a[0];
-			sum2=sum1;
-			ans=0;
-			for(int i=1;i<n;i++){
+		else{
+			sum=0;
+			for(int i=m;i<n;i++){
 				if(a[i]>=0){
-					sum2=sum2+a[i];
+					sum+=a[i];
 				}
 				else{
-					pqm.push(a[i]);
-					sum2=sum2+a[i];
-					if(sum2<sum1){
-						sum2=sum2-2*pqm.top();
-						pqm.pop();
-						ans++;
+					if(sum+a[i]>=0){
+						sum+=a[i];
+						minheap.push(a[i]);
+					}
+					else{
+						sum+=a[i];
+						minheap.push(a[i]);
+						ans+=1;
+						sum=sum+(-2*minheap.top());
+						minheap.pop();
+					}
+				}
+			}
+			negativesum=0;
+			// it is named negative because it is negative
+			for(int i=m-1;i>0;i--){
+				if(a[i]<=0){
+					negativesum+=a[i];
+				}
+				else{
+					if(negativesum+a[i]<=0){
+						negativesum+=a[i];
+						maxheap.push(a[i]);
+					}
+					else{
+						negativesum+=a[i];
+						maxheap.push(a[i]);
+						ans+=1;
+						negativesum=negativesum-2*maxheap.top();
+						maxheap.pop();
 					}
 				}
 			}
 			cout<<ans<<"\n";
-			// pqm.clear();
-			while(!pqm.empty()){
-				pqm.pop();
-			}
-		}
-		else{
-			for(int i=0;i<m;i++){
-				sum1+=a[i];
-			}
-			sum2=sum1;
-			ans=0;
-			for(int i=m-1;0<i;i--){
-				if(a[i]>0){
-					pqm.push(-a[i]);
-					sum2=sum2-a[i];
-					if(sum2<sum1){
-						sum2=sum2-2*pqm.top();
-						sum1=sum1+2*pqm.top();
-						// cout<<pqm.top()<<"  :1\n";
-						pqm.pop();
-						ans++;
-					}
-				}
-				else{
-					sum2=sum2-a[i];
-				}
-			}
-			while(!pqm.empty()){
-				pqm.pop();
-			}
-			sum2=sum1;
-			ans1=0;
-			for(int i=m;i<n;i++){
-				if(a[i]>=0){
-					sum2=sum2+a[i];
-				}
-				else{
-					pqm.push(a[i]);
-					sum2=sum2+a[i];
-					if(sum2<sum1){
-						sum2=sum2-2*pqm.top();
-						pqm.pop();
-						ans1++;
-					}
-				}
-			}
-			cout<<ans+ans1<<"\n";
-			// pqm.clear();
-			while(!pqm.empty()){
-				pqm.pop();
-			}
 		}
     }
     return 0;
